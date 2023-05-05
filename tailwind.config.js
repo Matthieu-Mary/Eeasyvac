@@ -6,7 +6,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'my_bg_image' : "url('../public/images/home.jpg')",
+      }
+    },
   },
   plugins: [require("daisyui")],
 }
