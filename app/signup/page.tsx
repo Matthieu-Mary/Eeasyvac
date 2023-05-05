@@ -1,41 +1,42 @@
 "use client";
 import axios from "axios";
-import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Button from "../components/Button";
-import { toast } from "react-hot-toast"
-import Image from "next/image";
+import { app } from "../firebase/clientApp";
+import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { toast } from "react-hot-toast";
+
+
 
 type Props = {};
 
 function Signup({}: Props) {
+  const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
   const [isLoading, setIsLoading] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
+  console.log(app);
 
+  const registerWithEmailAndPassword = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      
+    })
+    .catch((err) => toast.error("Une erreur est survenue"))
+  }
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    setIsLoading(true);
-    axios
-      .post("/api/register", data)
-      .then(() => {})
-      .catch((err) => toast.error("Ca ne fonctionne pas, espèce de merde"))
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  const registerWithGoogle = () => {
+    signInWithPopup(auth, googleProvider)
+    .then(() => {
+
+    })
+    .catch(err => toast.error("Une erreur est survenue"))
+  }
 
   return (
     <section className="flex justify-center items-center h-screen">
@@ -55,6 +56,7 @@ function Signup({}: Props) {
                 id="grid-first-name"
                 type="text"
                 placeholder="Jane"
+                onChange={(e) => setFirstName(e.target.value)}
               />
               <p className="text-red-500 text-xs italic hidden">
                 Please fill out this field.
@@ -90,6 +92,7 @@ function Signup({}: Props) {
                 id="grid-email"
                 type="email"
                 placeholder="Adresse Email"
+                onChange={(e) => setEmail(e.target.value)}
               />
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -103,6 +106,7 @@ function Signup({}: Props) {
                 id="grid-password"
                 type="password"
                 placeholder="***********"
+                onChange={(e) => setPassword(e.target.value)}
               />
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -118,14 +122,14 @@ function Signup({}: Props) {
                 placeholder="***********"
               />
               <button
-                onClick={handleSubmit(onSubmit)}
+                onClick={registerWithEmailAndPassword}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                 type="button"
               >
                 Créer un compte
               </button>
               <button
-                onClick={() => {}}
+                onClick={registerWithGoogle}
                 className="relative inline-flex justify-center items-center mt-4 bg-gray-300 hover:bg-gray-200 text-black border-gray-600 font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                 type="button"
               >
