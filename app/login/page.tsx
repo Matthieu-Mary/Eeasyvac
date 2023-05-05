@@ -28,14 +28,14 @@ function Login({}: Props) {
               Mot de passe
             </label>
             <input
-              className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-2 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-2 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"
               placeholder="******************"
             />
-            <p className="text-red-500 text-xs italic">
+            {/* <p className="text-red-500 text-xs italic">
               Veuillez choisir un mot de passe.
-            </p>
+            </p> */}
           </div>
           <div className="flex items-center justify-between">
             <button
