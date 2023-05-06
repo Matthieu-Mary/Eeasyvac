@@ -2,11 +2,14 @@
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { useCallback, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { app } from "../firebase/clientApp";
-import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { toast } from "react-hot-toast";
-
 
 
 type Props = {};
@@ -14,29 +17,39 @@ type Props = {};
 function Signup({}: Props) {
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  console.log(app);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const registerWithEmailAndPassword = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      
-    })
-    .catch((err) => toast.error("Une erreur est survenue"))
-  }
+    confirmPassword === password
+      ? createUserWithEmailAndPassword(auth, email, password)
+          .then(() => {
+            toast.success(
+              "Votre compte à bien été créé, rendez vous sur la page de connexion afin de vous connecter"
+            );
+            setFirstName("");
+            setLastName("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+          })
+          .catch((err) => {
+            toast.error("Une erreur est survenue: " + err);
+          })
+      : toast.error("Les mots de passe doivent être identiques");
+  };
 
   const registerWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
-    .then(() => {
-
-    })
-    .catch(err => toast.error("Une erreur est survenue"))
-  }
+      .then(() => {
+        toast.success("Compte via Google créé avec succès");
+      })
+      .catch((err) => toast.error("Une erreur est survenue: " + err));
+  };
 
   return (
     <section className="flex justify-center items-center h-screen">
@@ -51,6 +64,7 @@ function Signup({}: Props) {
                 Prénom
               </label>
               <input
+                value={firstName}
                 required
                 className={`appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white`}
                 id="grid-first-name"
@@ -70,11 +84,13 @@ function Signup({}: Props) {
                 Nom
               </label>
               <input
+                value={lastname}
                 required
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-last-name"
                 type="text"
                 placeholder="Doe"
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
           </div>
@@ -87,6 +103,7 @@ function Signup({}: Props) {
                 Email
               </label>
               <input
+                value={email}
                 required
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-email"
@@ -101,6 +118,7 @@ function Signup({}: Props) {
                 Mot de passe
               </label>
               <input
+                value={password}
                 required
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-password"
@@ -115,6 +133,8 @@ function Signup({}: Props) {
                 Confirmer mot de passe
               </label>
               <input
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-5 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-confirm-password"

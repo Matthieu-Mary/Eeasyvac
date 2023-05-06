@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast"
 
 const Toasterprovider = () => {
     return (
-        <Toaster />
+        <Toaster position="top-center"  />
     )
 }
 
