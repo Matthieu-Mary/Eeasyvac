@@ -54,7 +54,7 @@ function Signup({}: Props) {
   return (
     <section className="flex justify-center items-center h-screen">
       <div className="w-full max-w-sm">
-        <form className="shadow-lg pb-1 w-full max-w-lg">
+        <form className="shadow-lg pb-1 w-full max-w-lg p-8">
           <div className="flex flex-wrap -mx-3 mb-4">
             <div className="w-full md:w-1/2 px-3 mb-4 md:mb-0">
               <label
