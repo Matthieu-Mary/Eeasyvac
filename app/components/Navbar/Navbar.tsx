@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Container from "../Container";
 import Logo from "./Logo";
 import MenuItem from "./MenuItem";
@@ -13,25 +12,25 @@ type Props = {};
 function Navbar({}: Props) {
   const [userAuth, setUserAuth] = useState(false);
   const auth = getAuth(app);
+  const user = auth.currentUser;
+  const userName = user?.displayName;
 
-  useEffect(() => { 
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUserAuth(!!user);
     });
     return unsubscribe;
-  }, [auth])
-
-
+  }, [auth]);
+  
   const logoutUser = () => {
     signOut(auth);
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
   };
 
-
   return (
-    <header className="fixed w-full bg-white z-10 shadow-sm">
-      <div className="py-4 border-b-[1px]">
+    <header className=" w-full bg-white z-10 shadow-md">
+      <div className="y-4 border-b-[1px]">
         <Container>
           <div className="flex items-center">
             <Logo />
@@ -43,7 +42,7 @@ function Navbar({}: Props) {
             <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
               <div className="flex justify-center items-center px-1">
                 <FaUserAlt className="rounded-full w-7 h-7 bg-gray-200" />
-                <MenuItem linkLabel="/dashboard" label={"Prénom"} />
+                <MenuItem linkLabel="/dashboard" label={user?.displayName ? user.displayName : user?.email} />
               </div>
               <MenuItem
                 linkLabel="/"

@@ -6,7 +6,7 @@ type Props = {
 
 function Container({children}: Props) {
   return (
-    <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 flex justify-between">{children}</div>
+    <div className="max-w-[2520px] mx-auto xl:px-20 md:px-10 sm:px-2 px-4 flex justify-between py-2">{children}</div>
   )
 }
 

@@ -1,28 +1,26 @@
 "use client";
-import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { app } from "../firebase/clientApp";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile
 } from "firebase/auth";
 import { toast } from "react-hot-toast";
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 function Signup({}: Props) {
-
-  const auth = getAuth(app);
+  const auth: any = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
   const router = useRouter();
   // const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -31,15 +29,20 @@ function Signup({}: Props) {
     confirmPassword === password
       ? createUserWithEmailAndPassword(auth, email, password)
           .then((response: any) => {
-            sessionStorage.setItem("token", response.user.accessToken)
+            const user = response.user;
+            user.displayName = firstName + " " + lastName
+            sessionStorage.setItem("token", response.user.accessToken);
             toast.success(
-              "Votre compte à bien été créé, rendez vous sur la page de connexion afin de vous connecter"
-            );
-            setFirstName("");
-            setLastName("");
-            setEmail("");
-            setPassword("");
-            setConfirmPassword("");
+              "Votre compte à bien été créé"
+              );
+              setFirstName("");
+              setLastName("");
+              setEmail("");
+              setPassword("");
+              setConfirmPassword("");
+              router.push("/dashboard")
+              console.log(user)
+              addFirstAndLastName();
           })
           .catch((err) => {
             toast.error("Une erreur est survenue: " + err);
@@ -47,12 +50,24 @@ function Signup({}: Props) {
       : toast.error("Les mots de passe doivent être identiques");
   };
 
+  const addFirstAndLastName = () => {
+    updateProfile(auth.currentUser, {
+      displayName: firstName + " " + lastName
+    }).then((res) => {
+      // Do something
+    }).catch((err: any) => {
+      toast.error("Problème, le nom n'a pas été mis à jour")
+    });
+  }
+
   const registerWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
       .then((response: any) => {
-        console.log(response.user)
-        sessionStorage.setItem("token", response.user.accessToken)
+        const user = response.user;
+        user.displayName = firstName + " " + lastName;
+        sessionStorage.setItem("token", response.user.accessToken);
         toast.success("Compte via Google créé avec succès");
+        router.push("/dashboard")
       })
       .catch((err) => toast.error("Une erreur est survenue: " + err));
   };
@@ -60,10 +75,10 @@ function Signup({}: Props) {
   useEffect(() => {
     let token = sessionStorage.getItem("token");
 
-    if(token) {
-      router.push("/dashboard")
+    if (token) {
+      router.push("/dashboard");
     }
-  }, [])
+  }, [router]);
 
   return (
     <section className="flex justify-center items-center h-screen">
@@ -98,7 +113,7 @@ function Signup({}: Props) {
                 Nom
               </label>
               <input
-                value={lastname}
+                value={lastName}
                 required
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-last-name"

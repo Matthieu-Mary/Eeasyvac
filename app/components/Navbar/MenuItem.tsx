@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
-  linkLabel: string;
-  label: string;
+  linkLabel: string ;
+  label: string | null | undefined;
   onClick?: () => void;
 }
 

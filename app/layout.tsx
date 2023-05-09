@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head />
-      <body className={font.className}>
+      <body className={`${font.className} flex flex-col`} >
         <Providers>
           <Toasterprovider />
           <Navbar />

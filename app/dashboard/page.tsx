@@ -3,6 +3,7 @@ import { database } from "../firebase/clientApp";
 import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import EventCard from "../components/EventCard";
 
 type Props = {};
 
@@ -24,25 +25,23 @@ function Dashboard({}: Props) {
   }, []);
 
   return (
-    <div className="flex h-screen justify-center items-center flex-col">
-      <h2>Ici tu trouveras ton tableau de bord personnalisé</h2>
-      <Link href="/dashboard/creategroup" className="text-blue-600">
-        Créer un groupe
-      </Link>
-      <div className="flex justify-evenly">
+    <div className="flex h-screen flex-col p-4">
+      <div className="flex justify-between items-center p-10">
+        <h2 className="text-2xl font-bold">Mes groupes rejoints :</h2>
+        <Link href="/dashboard/creategroup" className="text-blue-600">
+          Créer un nouveau groupe
+        </Link>
+      </div>
+      <div className="flex justify-evenly flex-wrap">
         {dataGroups.map((group) => {
           return (
-            <div key={group.id} className="card w-80 bg-base-100 shadow-xl mr-5">
-              <div className="card-body">
-                <h2 className="card-title">{group.name}</h2>
-                <p>
-                  Créé le <span>...</span> par : <span>...</span>
-                </p>
-                <div className="card-actions justify-end">
-                  <button className="btn btn-primary">Continuer</button>
-                </div>
-              </div>
-            </div>
+            <EventCard
+              key={group.id}
+              id={group.id}
+              title={group.name}
+              date={group.date}
+              author={group.author}
+            />
           );
         })}
       </div>
