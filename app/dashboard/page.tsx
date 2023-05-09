@@ -38,7 +38,7 @@ function Dashboard({}: Props) {
             <EventCard
               key={group.id}
               id={group.id}
-              title={group.name}
+              title={group.title}
               date={group.date}
               author={group.author}
             />
