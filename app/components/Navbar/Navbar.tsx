@@ -4,10 +4,14 @@ import Container from "../Container";
 import Logo from "./Logo";
 import MenuItem from "./MenuItem";
 import { FaUserAlt } from "react-icons/fa";
+import { app } from "../../firebase/clientApp";
+import { getAuth, signOut } from "firebase/auth";
+import { useEffect } from "react";
 
 type Props = {};
 
 function Navbar({}: Props) {
+  const auth = getAuth(app);
   const isAuth = sessionStorage.getItem("token")
     ? sessionStorage.getItem("token")
     : localStorage.getItem("token")
@@ -15,9 +19,14 @@ function Navbar({}: Props) {
     : false;
 
   const logoutUser = () => {
+    signOut(auth);
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
-  }
+  };
+
+  useEffect(() => {
+    console.log("remis a jour")
+  }, [isAuth])
 
   return (
     <header className="fixed w-full bg-white z-10 shadow-sm">
@@ -33,29 +42,20 @@ function Navbar({}: Props) {
             <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
               <div className="flex justify-center items-center px-1">
                 <FaUserAlt className="rounded-full w-7 h-7 bg-gray-200" />
-                <MenuItem
-                  linkLabel="/dashboard"
-                  label={"Prénom"}
-                />
+                <MenuItem linkLabel="/dashboard" label={"Prénom"} />
               </div>
               <MenuItem
                 linkLabel="/"
                 label={"Se déconnecter"}
                 onClick={() => {
-                  logoutUser()
+                  logoutUser();
                 }}
               />
             </div>
           ) : (
             <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
-              <MenuItem
-                linkLabel="/login"
-                label={"Se connecter"}
-              />
-              <MenuItem
-                linkLabel="/signup"
-                label={"Créer un compte"}
-              />
+              <MenuItem linkLabel="/login" label={"Se connecter"} />
+              <MenuItem linkLabel="/signup" label={"Créer un compte"} />
             </div>
           )}
         </Container>

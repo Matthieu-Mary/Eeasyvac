@@ -1,22 +1,28 @@
 "use client";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { app } from "../firebase/clientApp";
 
 type Props = {};
 
 function Login({}: Props) {
+  const auth = getAuth(app);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  
+
   const loginUser = () => {
-    toast.success("User logged-in");
-    setEmail("");
-    setPassword("");
-    router.push("/dashboard")
+    signInWithEmailAndPassword(auth, email, password).then((response: any) => {
+      sessionStorage.setItem("token", response.user.accessToken);
+      toast.success("Vous êtes connecté");
+      setEmail("");
+      setPassword("");
+      router.push("/dashboard");
+    })
+    .catch(err => toast.error("Email ou mot de passe incorrect"));
   };
   return (
     <section className="flex justify-center items-center h-screen">
