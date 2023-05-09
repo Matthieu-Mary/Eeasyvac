@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 type Props = {};
 
 function Signup({}: Props) {
+
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
   const router = useRouter();
