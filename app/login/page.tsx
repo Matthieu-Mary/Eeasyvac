@@ -1,14 +1,19 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase/clientApp";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../redux/features/authSlice";
+import { RootState } from "../redux/store";
+
 
 type Props = {};
 
 function Login({}: Props) {
+  const dispatch = useDispatch()
   const auth = getAuth(app);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

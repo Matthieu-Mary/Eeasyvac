@@ -5,18 +5,22 @@ import Logo from "./Logo";
 import MenuItem from "./MenuItem";
 import { FaUserAlt } from "react-icons/fa";
 import { app } from "../../firebase/clientApp";
-import { getAuth, signOut } from "firebase/auth";
-import { useEffect } from "react";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
 
 type Props = {};
 
 function Navbar({}: Props) {
+  const [userAuth, setUserAuth] = useState(false);
   const auth = getAuth(app);
-  const isAuth = sessionStorage.getItem("token")
-    ? sessionStorage.getItem("token")
-    : localStorage.getItem("token")
-    ? localStorage.getItem("token")
-    : false;
+
+  useEffect(() => { 
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserAuth(!!user);
+    });
+    return unsubscribe;
+  }, [auth])
+
 
   const logoutUser = () => {
     signOut(auth);
@@ -24,9 +28,6 @@ function Navbar({}: Props) {
     sessionStorage.removeItem("token");
   };
 
-  useEffect(() => {
-    console.log("remis a jour")
-  }, [isAuth])
 
   return (
     <header className="fixed w-full bg-white z-10 shadow-sm">
@@ -38,7 +39,7 @@ function Navbar({}: Props) {
               Easyvac
             </h1>
           </div>
-          {isAuth ? (
+          {userAuth ? (
             <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
               <div className="flex justify-center items-center px-1">
                 <FaUserAlt className="rounded-full w-7 h-7 bg-gray-200" />
