@@ -12,7 +12,7 @@ function Home({}: Props) {
           initial={{ x: -300, scale: 1, opacity: 0 }}
           animate={{ x: 0, scale: 1.25, opacity: 1 }}
           transition={{ duration: 1.5 }}
-          className="absolute top-60 z-50"
+          className="absolute top-40 z-50"
         >
           <h3 className="text-center text-2xl">Bienvenue sur Easyvac !</h3>
           <p className="text-xl">Planifiez vos vacances entre amis</p>

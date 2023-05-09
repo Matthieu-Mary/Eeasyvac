@@ -27,7 +27,8 @@ function Signup({}: Props) {
   const registerWithEmailAndPassword = () => {
     confirmPassword === password
       ? createUserWithEmailAndPassword(auth, email, password)
-          .then(() => {
+          .then((response) => {
+            console.log(response)
             toast.success(
               "Votre compte à bien été créé, rendez vous sur la page de connexion afin de vous connecter"
             );
@@ -45,7 +46,8 @@ function Signup({}: Props) {
 
   const registerWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
-      .then(() => {
+      .then((response) => {
+        console.log(response)
         toast.success("Compte via Google créé avec succès");
       })
       .catch((err) => toast.error("Une erreur est survenue: " + err));
