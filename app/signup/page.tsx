@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { app } from "../firebase/clientApp";
 import {
   getAuth,
@@ -10,6 +10,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { toast } from "react-hot-toast";
+import { useRouter } from 'next/navigation';
 
 
 type Props = {};
@@ -17,6 +18,7 @@ type Props = {};
 function Signup({}: Props) {
   const auth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
+  const router = useRouter();
   // const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
@@ -27,8 +29,8 @@ function Signup({}: Props) {
   const registerWithEmailAndPassword = () => {
     confirmPassword === password
       ? createUserWithEmailAndPassword(auth, email, password)
-          .then((response) => {
-            console.log(response)
+          .then((response: any) => {
+            sessionStorage.setItem("token", response.user.accessToken)
             toast.success(
               "Votre compte à bien été créé, rendez vous sur la page de connexion afin de vous connecter"
             );
@@ -46,12 +48,21 @@ function Signup({}: Props) {
 
   const registerWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
-      .then((response) => {
-        console.log(response)
+      .then((response: any) => {
+        console.log(response.user)
+        sessionStorage.setItem("token", response.user.accessToken)
         toast.success("Compte via Google créé avec succès");
       })
       .catch((err) => toast.error("Une erreur est survenue: " + err));
   };
+
+  useEffect(() => {
+    let token = sessionStorage.getItem("token");
+
+    if(token) {
+      router.push("/dashboard")
+    }
+  }, [])
 
   return (
     <section className="flex justify-center items-center h-screen">

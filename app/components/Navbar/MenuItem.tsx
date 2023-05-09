@@ -1,9 +1,10 @@
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
   linkLabel: string;
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 function MenuItem({linkLabel ,label, onClick}: Props) {
