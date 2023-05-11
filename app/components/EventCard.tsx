@@ -9,7 +9,7 @@ type Props = {
 
 function EventCard({id, title, author, date}: Props) {
   return (
-    <div key={id} className="card w-80 bg-base-100 shadow-xl mr-5 mb-2">
+    <div key={id} className="card w-80 bg-base-100 shadow-xl mr-5 mb-6">
               <div className="card-body">
                 <h2 className="card-title">{title}</h2>
                 <p className='text-sm'>
