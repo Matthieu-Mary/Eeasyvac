@@ -13,7 +13,7 @@ function Navbar({}: Props) {
   const [userAuth, setUserAuth] = useState(false);
   const auth = getAuth(app);
   const user = auth.currentUser;
-  const userName = user?.displayName;
+  const userFirstname = user?.displayName ? user.displayName.split(" ")[0] : "";
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -42,7 +42,7 @@ function Navbar({}: Props) {
             <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
               <div className="flex justify-center items-center px-1">
                 <FaUserAlt className="rounded-full w-7 h-7 bg-gray-200" />
-                <MenuItem linkLabel="/dashboard" label={user?.displayName ? user.displayName : user?.email} />
+                <MenuItem linkLabel="/dashboard" label={userFirstname ? userFirstname : user?.email} />
               </div>
               <MenuItem
                 linkLabel="/"
