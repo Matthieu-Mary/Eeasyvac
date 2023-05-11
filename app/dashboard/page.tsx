@@ -25,8 +25,8 @@ function Dashboard({}: Props) {
   }, []);
 
   return (
-    <div className="flex h-screen flex-col p-4 max-w-7xl mx-auto">
-      <div className="flex justify-between items-center p-10">
+    <div className="flex h-screen flex-col p-4 max-w-8xl mx-auto">
+      <div className="flex justify-between items-center p-5">
         <h2 className="text-2xl font-bold">Mes groupes rejoints :</h2>
         <Link href="/dashboard/creategroup" className="text-blue-600 hover:opacity-80">
           Créer un nouveau groupe

@@ -60,17 +60,17 @@ function Signup({}: Props) {
     });
   }
 
-  const registerWithGoogle = () => {
-    signInWithPopup(auth, googleProvider)
-      .then((response: any) => {
-        const user = response.user;
-        user.displayName = firstName + " " + lastName;
-        sessionStorage.setItem("token", response.user.accessToken);
-        toast.success("Compte via Google créé avec succès");
-        router.push("/dashboard")
-      })
-      .catch((err) => toast.error("Une erreur est survenue: " + err));
-  };
+  // const registerWithGoogle = () => {
+  //   signInWithPopup(auth, googleProvider)
+  //     .then((response: any) => {
+  //       const user = response.user;
+  //       user.displayName = firstName + " " + lastName;
+  //       sessionStorage.setItem("token", response.user.accessToken);
+  //       toast.success("Compte via Google créé avec succès");
+  //       router.push("/dashboard")
+  //     })
+  //     .catch((err) => toast.error("Une erreur est survenue: " + err));
+  // };
 
   useEffect(() => {
     let token = sessionStorage.getItem("token");
@@ -177,14 +177,14 @@ function Signup({}: Props) {
               >
                 Créer un compte
               </button>
-              <button
+              {/* <button
                 onClick={registerWithGoogle}
                 className="relative inline-flex justify-center items-center mt-4 bg-gray-300 hover:bg-gray-200 text-black border-gray-600 font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                 type="button"
               >
                 <FcGoogle className="absolute w-6 h-6 left-4" />
                 <p className={"text-center"}> Continuer avec Google</p>
-              </button>
+              </button> */}
             </div>
           </div>
         </form>
