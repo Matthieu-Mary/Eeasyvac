@@ -15,6 +15,7 @@ function Dashboard({}: Props) {
   const auth = getAuth(app);
   const user = auth.currentUser;
   const userFirstname = user?.displayName ? user.displayName.split(" ")[0] : "";
+
   const getDataGroups = async () => {
     await getDocs(databaseRef).then((res) =>
       setDataGroups(
@@ -44,7 +45,7 @@ function Dashboard({}: Props) {
               key={group.id}
               id={group.id}
               title={group.title}
-              date={group.date}
+              seconds={group.createdAt.seconds}
               author={group.author}
             />
           );
