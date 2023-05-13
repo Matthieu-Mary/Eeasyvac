@@ -1,9 +1,8 @@
 "use client";
 import { FcGoogle } from "react-icons/fc";
 import { useEffect, useState } from "react";
-import { app } from "../firebase/clientApp";
+import { auth } from "../firebase/clientApp";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
@@ -15,8 +14,7 @@ import { useRouter } from "next/navigation";
 type Props = {};
 
 function Signup({}: Props) {
-  const auth: any = getAuth(app);
-  const googleProvider = new GoogleAuthProvider();
+  // const googleProvider = new GoogleAuthProvider();
   const router = useRouter();
   // const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState("");

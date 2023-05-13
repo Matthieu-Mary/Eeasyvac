@@ -3,15 +3,14 @@ import Container from "../Container";
 import Logo from "./Logo";
 import MenuItem from "./MenuItem";
 import { FaUserAlt } from "react-icons/fa";
-import { app } from "../../firebase/clientApp";
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase/clientApp";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 type Props = {};
 
 function Navbar({}: Props) {
   const [userAuth, setUserAuth] = useState(false);
-  const auth = getAuth(app);
   const user = auth.currentUser;
   const userFirstname = user?.displayName ? user.displayName.split(" ")[0] : "";
 
@@ -55,7 +54,7 @@ function Navbar({}: Props) {
           ) : (
             <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
               <MenuItem linkLabel="/login" label={"Se connecter"} />
-              <MenuItem linkLabel="/signup" label={"Créer un compte"} />
+              <MenuItem linkLabel="/register" label={"Créer un compte"} />
             </div>
           )}
         </Container>

@@ -3,13 +3,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../firebase/clientApp";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/clientApp";
 
 type Props = {};
 
 function Login({}: Props) {
-  const auth = getAuth(app);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();

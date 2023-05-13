@@ -2,8 +2,7 @@
 import { database } from "../../firebase/clientApp";
 import { useState } from "react";
 import { collection, addDoc, CollectionReference } from "firebase/firestore";
-import { app } from "../../firebase/clientApp";
-import { getAuth } from "firebase/auth";
+import { auth } from "../../firebase/clientApp";
 
 function CreateGroup() {
   const [title, setTitle] = useState("");
@@ -11,7 +10,6 @@ function CreateGroup() {
   const [endDate, setEndDate] = useState<any>("");
   const [linkToPage, setLinkToPage] = useState("");
   const [globalBudget, setGlobalBudget] = useState<any>("");
-  const auth = getAuth(app);
   const author = auth.currentUser?.displayName;
   const databaseRef: CollectionReference = collection(database, "createGroup");
   const addGroupe = (e: any) => {

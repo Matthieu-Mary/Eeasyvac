@@ -4,15 +4,13 @@ import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import EventCard from "../components/EventCard";
-import { app } from "../firebase/clientApp";
-import { getAuth } from "firebase/auth";
+import { auth } from "../firebase/clientApp";
 
 type Props = {};
 
 function Dashboard({}: Props) {
   const [dataGroups, setDataGroups] = useState<any[]>([]);
   const databaseRef = collection(database, "createGroup");
-  const auth = getAuth(app);
   const user = auth.currentUser;
   const userFirstname = user?.displayName ? user.displayName.split(" ")[0] : "";
 
