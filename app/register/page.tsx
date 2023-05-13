@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  updateProfile
+  updateProfile,
 } from "firebase/auth";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -28,19 +28,17 @@ function Signup({}: Props) {
       ? createUserWithEmailAndPassword(auth, email, password)
           .then((response: any) => {
             const user = response.user;
-            user.displayName = firstName + " " + lastName
+            user.displayName = firstName + " " + lastName;
             sessionStorage.setItem("token", response.user.accessToken);
-            toast.success(
-              "Votre compte à bien été créé"
-              );
-              setFirstName("");
-              setLastName("");
-              setEmail("");
-              setPassword("");
-              setConfirmPassword("");
-              router.push("/dashboard")
-              console.log(user)
-              addFirstAndLastName();
+            toast.success("Votre compte à bien été créé");
+            setFirstName("");
+            setLastName("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+            router.push("/dashboard");
+            console.log(user);
+            addFirstAndLastName();
           })
           .catch((err) => {
             toast.error("Une erreur est survenue: " + err);
@@ -49,14 +47,21 @@ function Signup({}: Props) {
   };
 
   const addFirstAndLastName = () => {
-    updateProfile(auth.currentUser, {
-      displayName: firstName + " " + lastName
-    }).then((res) => {
-      // Do something
-    }).catch((err: any) => {
-      toast.error("Problème, le nom n'a pas été mis à jour")
-    });
-  }
+    const user = auth.currentUser;
+    if (user) {
+      updateProfile(user, {
+        displayName: firstName + " " + lastName,
+      })
+        .then((res) => {
+          // Do something
+        })
+        .catch((err: any) => {
+          toast.error("Problème, le nom n'a pas été mis à jour");
+        });
+    } else {
+      toast.error("Pas d'utilisateur dans la base de données");
+    }
+  };
 
   // const registerWithGoogle = () => {
   //   signInWithPopup(auth, googleProvider)
