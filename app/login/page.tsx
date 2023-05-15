@@ -67,12 +67,12 @@ function Login({}: Props) {
             >
               Se connecter
             </button>
-            <a
+            <Link
               className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-              href="#"
+              href="/forgetpassword"
             >
               Mot de passe oublié ?
-            </a>
+            </Link>
           </div>
           <Link
             className="mt-7 mx-auto inline-block align-baseline font-bold text-sm text-gray-400 hover:text-gray-700"

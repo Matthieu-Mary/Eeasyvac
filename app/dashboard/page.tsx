@@ -14,19 +14,23 @@ type Props = {};
 function Dashboard({}: Props) {
   const router = useRouter();
   const [dataGroups, setDataGroups] = useState<any[]>([]);
-  const [userSession, setUserSession] = useState(null);
+  const [loading, setLoading] = useState(false)
   const databaseRef = collection(database, "createGroup");
   const user = auth.currentUser;
   const userFirstname = user?.displayName ? user.displayName.split(" ")[0] : "";
 
+  // Protect the dashboard route against user not connected
   useEffect(() => {
-    const listener = onAuthStateChanged(auth, (user: any) => {
-      user ? setUserSession(user) : router.push("/");
+    const unsubscribe = onAuthStateChanged(auth, (user: any) => {
+      user ? user : router.push("/");
     });
-    return listener();
+    return () => unsubscribe();
   }, [router]);
 
+
+  // Get data from firebase store
   const getDataGroups = async () => {
+    setLoading(true)
     await getDocs(databaseRef).then((res) =>
       setDataGroups(
         res.docs.map((data) => {
@@ -34,15 +38,17 @@ function Dashboard({}: Props) {
         })
       )
     );
+    setLoading(false)
   };
 
-  useEffect(() => {
-    getDataGroups();
-  }, []);
+    // Call function to get data from firebase store
+    useEffect(() => {
+      getDataGroups() 
+    }, []);
 
-  return userSession ? (
+
+  return loading ? (
     <Loader />
-    
   ) : (
     <div className="flex h-screen flex-col p-4 max-w-8xl mx-auto">
       <div className="flex justify-between items-center p-5">
