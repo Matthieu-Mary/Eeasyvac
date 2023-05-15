@@ -1,7 +1,7 @@
 "use client";
 import { FcGoogle } from "react-icons/fc";
 import { useEffect, useState } from "react";
-import { auth } from "../firebase/clientApp";
+import { auth, user } from "../firebase/clientApp";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -10,6 +10,7 @@ import {
 } from "firebase/auth";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { setDoc } from "firebase/firestore";
 
 type Props = {};
 
@@ -26,41 +27,22 @@ function Signup({}: Props) {
   const registerWithEmailAndPassword = () => {
     confirmPassword === password
       ? createUserWithEmailAndPassword(auth, email, password)
-          .then((response: any) => {
-            const user = response.user;
-            user.displayName = firstName + " " + lastName;
-            sessionStorage.setItem("token", response.user.accessToken);
-            toast.success("Votre compte à bien été créé");
-            setFirstName("");
-            setLastName("");
-            setEmail("");
-            setPassword("");
-            setConfirmPassword("");
+          .then((authUser) => {
+            return setDoc(user(authUser.user.uid), {
+              firstName,
+              lastName,
+              email,
+              groups: [],
+            });
+          })
+          .then( () => {
             router.push("/dashboard");
-            console.log(user);
-            addFirstAndLastName();
+            toast.success("Votre compte à bien été créé");
           })
           .catch((err) => {
             toast.error("Une erreur est survenue: " + err);
           })
       : toast.error("Les mots de passe doivent être identiques");
-  };
-
-  const addFirstAndLastName = () => {
-    const user = auth.currentUser;
-    if (user) {
-      updateProfile(user, {
-        displayName: firstName + " " + lastName,
-      })
-        .then((res) => {
-          // Do something
-        })
-        .catch((err: any) => {
-          toast.error("Problème, le nom n'a pas été mis à jour");
-        });
-    } else {
-      toast.error("Pas d'utilisateur dans la base de données");
-    }
   };
 
   // const registerWithGoogle = () => {
@@ -74,14 +56,6 @@ function Signup({}: Props) {
   //     })
   //     .catch((err) => toast.error("Une erreur est survenue: " + err));
   // };
-
-  useEffect(() => {
-    let token = sessionStorage.getItem("token");
-
-    if (token) {
-      router.push("/dashboard");
-    }
-  }, [router]);
 
   return (
     <section className="flex justify-center items-center h-screen">
