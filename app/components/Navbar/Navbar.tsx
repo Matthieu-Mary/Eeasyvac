@@ -19,7 +19,7 @@ function Navbar({}: Props) {
       setUserAuth(!!user);
     });
     return unsubscribe;
-  }, [auth]);
+  }, [user]);
   
   const logoutUser = () => {
     signOut(auth);

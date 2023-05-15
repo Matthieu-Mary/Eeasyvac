@@ -5,14 +5,26 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import EventCard from "../components/EventCard";
 import { auth } from "../firebase/clientApp";
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import Loader from "../components/Loader";
 
 type Props = {};
 
 function Dashboard({}: Props) {
+  const router = useRouter();
   const [dataGroups, setDataGroups] = useState<any[]>([]);
+  const [userSession, setUserSession] = useState(null);
   const databaseRef = collection(database, "createGroup");
   const user = auth.currentUser;
   const userFirstname = user?.displayName ? user.displayName.split(" ")[0] : "";
+
+  useEffect(() => {
+    const listener = onAuthStateChanged(auth, (user: any) => {
+      user ? setUserSession(user) : router.push("/");
+    });
+    return listener();
+  }, [router]);
 
   const getDataGroups = async () => {
     await getDocs(databaseRef).then((res) =>
@@ -28,11 +40,20 @@ function Dashboard({}: Props) {
     getDataGroups();
   }, []);
 
-  return (
+  return userSession ? (
+    <Loader />
+    
+  ) : (
     <div className="flex h-screen flex-col p-4 max-w-8xl mx-auto">
       <div className="flex justify-between items-center p-5">
-        <h2 className="text-2xl font-bold">Bonjour <span className="text-blue-600">{userFirstname}</span> voilà les groupes que tu as rejoints :</h2>
-        <Link href="/dashboard/creategroup" className="text-blue-600 hover:opacity-80">
+        <h2 className="text-2xl font-bold">
+          Bonjour <span className="text-blue-600">{userFirstname}</span> voilà
+          les groupes que tu as rejoints :
+        </h2>
+        <Link
+          href="/dashboard/creategroup"
+          className="text-blue-600 hover:opacity-80"
+        >
           Créer un nouveau groupe
         </Link>
       </div>
